@@ -79,7 +79,10 @@ def stop_typing(self, conversation):
         OutgoingChatstateProtocolEntity.STATE_PAUSED,
         Jid.normalize(conversation)
     ))
-
+    
+#Set the Bots Info Message
+def setInfo(status):
+    profile_setStatus(entity,status)
 
 def ack_messages(self, conversation):
     # Filter messages from this conversation
@@ -204,3 +207,12 @@ def on_upload_progress(self, filePath, jid, progress):
     sys.stdout.write("%s => %s, %d%% \r" % (os.path.basename(filePath), jid, progress))
     sys.stdout.flush()
 
+def profile_setStatus(self,text):
+    def onSuccess(resultIqEntity, originalIqEntity):
+        logger.error("Status updated successfully")
+
+    def onError(errorIqEntity, originalIqEntity):
+        logger.error("Error updating status")
+
+    entity = SetStatusIqProtocolEntity(text)
+    self._sendIq(entity, onSuccess, onError)
